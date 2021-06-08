@@ -13,7 +13,7 @@ var SimpleLexer = /** @class */ (function () {
     }
     SimpleLexer.prototype.initToken = function (ch) {
         if (this.tokenText.length > 0) {
-            this.token.setText(this.tokenText.toString());
+            this.token.setText(this.tokenText);
             this.tokens.push(this.token);
             this.tokenText = '';
             this.token = new token_1.SimpleToken();
@@ -93,7 +93,7 @@ var SimpleLexer = /** @class */ (function () {
         var ch = '';
         var state = base_1.DFAState.Initial;
         try {
-            while ((ch = reader.pop()) !== undefined) {
+            while ((ch = reader.shift()) !== undefined) {
                 switch (state) {
                     case base_1.DFAState.Initial:
                         state = this.initToken(ch);
@@ -180,6 +180,7 @@ var SimpleLexer = /** @class */ (function () {
         catch (ex) {
             throw ex;
         }
+        console.log('tokens :', this.tokens);
         return new tokenReader_1.SimpleTokenReader(this.tokens);
     };
     return SimpleLexer;

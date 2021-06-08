@@ -12,7 +12,7 @@ export default class SimpleLexer {
 
   private initToken(ch: string): DFAState {
     if (this.tokenText.length > 0) {
-      this.token.setText(this.tokenText.toString());
+      this.token.setText(this.tokenText);
       this.tokens.push(this.token);
 
       this.tokenText = '';
@@ -83,7 +83,7 @@ export default class SimpleLexer {
     let ch: string | undefined = '';
     let state: DFAState = DFAState.Initial;
     try {
-      while ((ch = reader.pop()) !== undefined) {
+      while ((ch = reader.shift()) !== undefined) {
         switch (state) {
           case DFAState.Initial:
             state = this.initToken(ch);
