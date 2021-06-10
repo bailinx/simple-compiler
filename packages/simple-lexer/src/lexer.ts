@@ -67,6 +67,10 @@ export default class SimpleLexer {
       newState = DFAState.Assignment;
       this.token.setType(TokenType.Assignment);
       this.tokenText += ch;
+    } else if (ch === ' ') {
+      newState = DFAState.Blank;
+      this.token.setType(TokenType.Blank);
+      this.tokenText += ch;
     } else {
       // 跳过所以未识别的符号
       newState = DFAState.Initial;
@@ -152,11 +156,21 @@ export default class SimpleLexer {
               state = DFAState.Id;
               this.tokenText += ch;
             }
+            break;
+          case DFAState.Blank:
+            if (ch === ' ') {
+              this.token.setType(TokenType.Blank);
+              this.tokenText += ch;
+            } else {
+              state = this.initToken(ch);
+            }
+            break;
           default: { }
         }
-        if (this.tokenText.length) {
-          this.initToken(ch);
-        }
+      }
+      // 处理最后一个字符
+      if (this.tokenText.length) {
+        this.initToken(this.tokenText);
       }
     } catch (ex) {
       throw ex;

@@ -6,6 +6,7 @@ export enum DFAState {
   Id,
   GE, // >=
   GT, // >
+  Blank, // 空格
   Assignment, // =
   Plus, // +
   Subtract, // -
@@ -33,6 +34,7 @@ export enum TokenType {
   SemiColon, // ;
   LeftParen, // (
   RightParen, // )
+  Blank, // 空格
 
   Assignment, // =
   If,

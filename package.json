@@ -4,6 +4,7 @@
   "description": "重学编译原理",
   "main": "index.js",
   "scripts": {
+    "lexer-debug": "cd ./packages/simple-lexer && npm run debug",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -13,7 +13,7 @@ export const isAlpha = (ch: any): ch is string => {
  * @returns 
  */
 export const isDigit = (ch: any): ch is number => {
-  return !isNaN(ch);
+  return /^[0-9]+$/.test(ch);
 };
 
 /**
