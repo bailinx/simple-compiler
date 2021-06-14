@@ -6,7 +6,7 @@ export enum DFAState {
   Id,
   GE, // >=
   GT, // >
-  Blank, // 空格
+
   Assignment, // =
   Plus, // +
   Subtract, // -

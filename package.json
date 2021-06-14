@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "重学编译原理",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "lexer-debug": "cd ./packages/simple-lexer && npm run debug",
+    "calc-debug": "cd ./packages/simple-calculator && npm run debug",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,5 +25,8 @@
   "homepage": "https://github.com/bailinx/simple-compiler#readme",
   "devDependencies": {
     "lerna": "^4.0.0"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

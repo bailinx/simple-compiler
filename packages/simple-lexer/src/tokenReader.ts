@@ -68,6 +68,10 @@ export class SimpleTokenReader implements TokenReader {
     }
   }
 
+  copy(): Token[] {
+    return this.tokens.slice(0);
+  }
+
   getPosition(): number {
     return this.pos;
   }

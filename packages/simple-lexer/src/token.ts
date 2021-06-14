@@ -4,7 +4,7 @@ export interface Token {
   /**
    * 设置Token的类型
    */
-  setType: (type: TokenType | null) => void;
+  setType: (type: TokenType) => void;
 
   /**
    * 获取Token的类型
@@ -27,7 +27,7 @@ export class SimpleToken implements Token {
   private type: TokenType | null = null;
   private text: string = '';
 
-  setType(type: TokenType | null) {
+  setType(type: TokenType) {
     this.type = type;
   };
 

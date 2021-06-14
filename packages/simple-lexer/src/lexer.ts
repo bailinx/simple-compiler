@@ -3,6 +3,11 @@ import { SimpleToken, Token } from "./token";
 import { SimpleTokenReader } from "./tokenReader";
 import { isAlpha, isBlank, isDigit } from "./utils";
 
+export { DFAState, TokenType } from "./base";
+export { SimpleToken, Token } from "./token";
+export { SimpleTokenReader, TokenReader } from "./tokenReader";
+export { isAlpha, isBlank, isDigit } from "./utils";
+
 
 // 简单的词法分析器
 export default class SimpleLexer {
@@ -66,10 +71,6 @@ export default class SimpleLexer {
     } else if (ch === '=') {
       newState = DFAState.Assignment;
       this.token.setType(TokenType.Assignment);
-      this.tokenText += ch;
-    } else if (ch === ' ') {
-      newState = DFAState.Blank;
-      this.token.setType(TokenType.Blank);
       this.tokenText += ch;
     } else {
       // 跳过所以未识别的符号
@@ -157,14 +158,6 @@ export default class SimpleLexer {
               this.tokenText += ch;
             }
             break;
-          case DFAState.Blank:
-            if (ch === ' ') {
-              this.token.setType(TokenType.Blank);
-              this.tokenText += ch;
-            } else {
-              state = this.initToken(ch);
-            }
-            break;
           default: { }
         }
       }
@@ -176,5 +169,13 @@ export default class SimpleLexer {
       throw ex;
     }
     return new SimpleTokenReader(this.tokens);
+  }
+
+  static dump(reader: SimpleTokenReader) {
+    console.log('text\ttype');
+    let token: Token | null = null;
+    while ((token = reader.read()) !== null) {
+      console.log(`${token.getText()}\t${token.getType()}`);
+    }
   }
 }
