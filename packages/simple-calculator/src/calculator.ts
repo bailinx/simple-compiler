@@ -1,4 +1,4 @@
-import { Token, TokenReader, TokenType } from 'simple-lexer';
+import SimpleLexer, { Token, TokenReader, TokenType } from 'simple-lexer';
 import { ASTNode, SimpleASTNode } from "./ASTNode";
 import { ASTNodeType } from "./ASTNodeType";
 
@@ -48,7 +48,7 @@ export class Calculator {
   }
 
   /**
-   * 加法表达式语法解析
+   * 语法解析：加法表达式
    * @param tokens 
    * @returns 
    */
@@ -75,7 +75,7 @@ export class Calculator {
   }
 
   /**
-   * 乘法表达式语法解析
+   * 语法解析：乘法表达式
    * @param tokens 
    * @returns 
    */
@@ -135,12 +135,83 @@ export class Calculator {
   }
 
   /**
+   * 语法解析：根节点
+   * @param tokens 
+   * @returns 
+   */
+  private prog(tokens: TokenReader): ASTNode {
+    const node = new SimpleASTNode(ASTNodeType.Program, 'Calculator');
+    const child = this.additive(tokens);
+    if (child !== null) {
+      node.addChild(child);
+    }
+    return node;
+  }
+
+  public calcWithNode(node: ASTNode, indent: string): number {
+    let result = 0;
+    console.log(indent + 'calculating: ', node.getType());
+    switch (node.getType()) {
+      case ASTNodeType.Program:
+        for (const child of node.getChildren()) {
+          result = this.calcWithNode(child, indent + '\t');
+        }
+        break;
+      case ASTNodeType.Additive: {
+        // 加法表达式
+        const child1 = node.getChildren()[0];
+        const value1 = this.calcWithNode(child1, indent + '\t');
+        const child2 = node.getChildren()[1];
+        const value2 = this.calcWithNode(child2, indent + '\t');
+        if (node.getText() === '+') {
+          result = value1 + value2;
+        } else {
+          result = value1 - value2;
+        }
+      } break;
+      case ASTNodeType.Multiplicative: {
+        // 乘法表达式
+        const child1 = node.getChildren()[0];
+        const value1 = this.calcWithNode(child1, indent + '\t');
+        const child2 = node.getChildren()[1];
+        const value2 = this.calcWithNode(child2, indent + '\t');
+        if (node.getText() === '*') {
+          result = value1 * value2;
+        } else {
+          result = value1 / value2;
+        }
+      } break;
+      case ASTNodeType.IntLiteral:
+        result = parseInt(node.getText(), 10);
+      default: ;
+    }
+    console.log(indent + 'calculator result = ' + result);
+    return result;
+  }
+
+  public evaluate(script: string) {
+    try {
+      const simplelexer = new SimpleLexer();
+      const tokens: TokenReader = simplelexer.tokenize(script);
+
+      const tree: ASTNode = this.prog(tokens);
+
+      Calculator.dump(tree, '');
+      this.calcWithNode(tree, '');
+    } catch (ex) {
+      console.error('发生异常: ', ex)
+    }
+  }
+
+
+
+  /**
   * 打印AST节点
   * @param node 
   * @param indent 
   */
   static dump(node: ASTNode, indent: string) {
-    console.log(indent + node.getType() + ' : ' + node.getText());
+    console.log(indent + ASTNodeType[node.getType()!] + ' : ' + node.getText());
     for (const item of node.getChildren()) {
       this.dump(item, indent + '\t');
     }
